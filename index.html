@@ -8,6 +8,52 @@
   <link href="https://fonts.googleapis.com/css2?family=Cal+Sans:wght@400;700&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css?family=Creepster&display=swap" rel="stylesheet">
   <style>
+/* === Efek Sedih (Mendung & Hujan) === */
+#sad-effect-overlay { /* Pastikan tidak ada .active di sini untuk style dasar */
+  display: none; /* Awalnya disembunyikan */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(70, 80, 100, 0.5); /* Warna mendung dasar */
+  backdrop-filter: grayscale(0.7) brightness(0.6);
+  z-index: 25000; /* Sesuaikan jika perlu, harus lebih rendah dari Game Memori & Morse/YT overlay */
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 2s ease-in-out; /* Transisi untuk fade-in/out */
+  overflow: hidden; /* Agar raindrop tidak membuat scrollbar jika keluar batas div */
+}
+
+#sad-effect-overlay.active {
+  display: block !important; /* Paksa display block saat aktif */
+  opacity: 1 !important;     /* Paksa opacity 1 saat aktif */
+}
+
+.raindrop {
+  position: absolute;
+  bottom: 100%;
+  width: 1px; /* Bisa dibuat 2px jika terlalu tipis */
+  height: 50px;
+  background: linear-gradient(to bottom, rgba(174,194,224,0) 0%, rgba(174,194,224,0.6) 100%);
+  animation: fall linear infinite;
+  pointer-events: none;
+  /* z-index: 1; /* relatif terhadap #sad-effect-overlay */ /* Opsional, biasanya tidak perlu */
+}
+
+@keyframes fall {
+  0% {
+    transform: translateY(0px);
+    opacity: 1; /* Hujan terlihat saat mulai jatuh */
+  }
+  99.9% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(calc(100vh + 100px)); /* Pastikan jatuh melewati layar */
+    opacity: 0; /* Hujan menghilang saat mencapai dasar */
+  }
+}
 
 body.game-memori-aktif {
     overflow: hidden !important; /* Mencegah scroll halaman di belakang lapisan game */
@@ -1236,8 +1282,35 @@ body.dark-mode #calendar-days div.weekday-header {
   .widget.widget-active { animation-delay: 0.2s; /* Adjust delay for mobile if needed */ }
 
   
-
+  .story-marker-highlight {
+    /* Style untuk menyorot teks/paragraf, bisa disesuaikan */
+    display: inline-block; /* Agar padding dan background bisa diterapkan jika span kosong */
+    background-color: rgba(255, 230, 150, 0.5); /* Kuning lembut transparan */
+    padding: 0 4px;
+    border-radius: 3px;
+    /* box-shadow: 0 0 8px rgba(255, 215, 0, 0.6); */
+    transition: background-color 0.3s ease;
+}
+body.dark-mode .story-marker-highlight {
+    background-color: rgba(100, 90, 50, 0.6); /* Warna yang kontras di dark mode */
+    /* box-shadow: 0 0 8px rgba(255, 215, 0, 0.4); */
+}
+.story-marker-text {
+    font-size: 0.8em;
+    font-style: italic;
+    color: #666; /* Sesuaikan warnanya */
+    margin-left: 8px;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+}
+body.dark-mode .story-marker-text {
+    color: #bbb;
+}
+.story-marker-text.visible {
+    opacity: 1;
+}
  
+
 }
 
 
@@ -1314,7 +1387,7 @@ body.dark-mode #calendar-days div.weekday-header {
         
         Gue gak minta dibela. Gue cuma pengen lo pada ngerti kalo empati masih ada sedikit di hati lo.
 
-        Nah, biar lo bisa sedikit paham kenapa gue jadi kayak gini, gue harus ajak lo balik sebentar ke masa sebelum semua rumor aneh itu muncul, tapi gue minta lo buat ketik angka 2022 dulu di kalkulator (banyak fitur tersembunyi di kalkulator, mungkin kalender juga?).. Percaya atau nggak, gue nggak selalu kayak gini. Dulu, hari-hari gue tuh... yah, jauh dari kata sama kayak kalian.
+        Nah, biar lo bisa sedikit paham kenapa gue jadi kayak gini, gue harus ajak lo balik sebentar ke masa sebelum semua rumor aneh itu muncul, tapi gue minta lo buat ketik angka 2022 dulu di kalkulator <br><span id="story_point_awal"></span>(banyak fitur tersembunyi di kalkulator, mungkin kalender juga?).. Percaya atau nggak, gue nggak selalu kayak gini. Dulu, hari-hari gue tuh... yah, jauh dari kata sama kayak kalian.
 
 Ngomong aja masih cadel, setiap gue maju presentasi, seisi kelas malah bingung gua ngucap kontrol malah jadi k****l dan auto diketawain mah. Jadi gak heran kalo akhirnya gue lebih sering nelen ludah daripada ngobrol. Selama lebih dari lima tahun gue hampir nggak pernah keluar rumah. Bukan karena gak mau, tapi karena orang tua gue terlalu overprotektif, sampai-sampai gue tumbuh kayak orang bisu gabisa ngomong.
 
@@ -1656,7 +1729,7 @@ Nggak peduli korbannya anak kecil sekalipun.
 Miris, Bro, miris banget.
 
 Perasaan gue campur aduk antara marah, sedih, dan nggak berdaya.
-Gimana caranya gue bisa ngelindungin Dia dari serangan sebrutal ini, sendirian?
+Gimana caranya gue bisa ngelindungin Dia dari serangan sebrutal ini, sendirian?<br><br><span id="story_point_smp_intro"></span>
 
 
 Sebelum masuk ke masa SMP, gue minta tolong lu pada ngetik 123 di kalkulator ya.
@@ -1775,7 +1848,7 @@ Sebelum lu baca dibawah ini, gue minta lo pada ketik angka 115 dulu ya, biar leb
 
 Gue udah di titik di mana gue bener-bener nggak peduli lagi sama kasus channel-channel anjing itu. Mau ada yang nyerang siapa lagi, mau ada drama apa lagi di kelas gara-gara itu, bodo amat. Biarin aja mereka ngegosipin gue di belakang, nyiptain rumor paling kreatif sedunia tentang gue, gue udah nggak punya energi buat nanggepin. Capek. Fokus gue cuma satu: nunggu. Nunggu kabar dari ‘Dia’, walau harapan itu makin hari makin tipis kayak kertas.
 
-Hingga akhirnya, tanggal 20 Maret itu dateng. Tanggal yang bakal ngehancurin semua sisa-sisa kewarasan gue. Gue dapet rentetan chat di WhatsApp, bukan dari nomor-nomor spam nggak jelas, tapi dari temen-temen sekelas yang gue kenal: Yusuf, Mario, sama Yudis. Mereka pake nomor baru, sengaja mungkin biar nggak kecampur sama teror. Isi chatnya… satu kalimat pendek yang langsung bikin dunia gue berhenti berputar: "Zan, dia… dia sakit kritis."
+<br><br><span id="story_point_kejadian_maret"></span>Hingga akhirnya, tanggal 20 Maret itu dateng. Tanggal yang bakal ngehancurin semua sisa-sisa kewarasan gue. Gue dapet rentetan chat di WhatsApp, bukan dari nomor-nomor spam nggak jelas, tapi dari temen-temen sekelas yang gue kenal: Yusuf, Mario, sama Yudis. Mereka pake nomor baru, sengaja mungkin biar nggak kecampur sama teror. Isi chatnya… satu kalimat pendek yang langsung bikin dunia gue berhenti berputar: "Zan, dia… dia sakit kritis."
 
 Hahaha. Lucu banget. Gue ketawa miris baca chat itu. Gue? Percaya gitu aja? Emang gue sebodoh apa sih? Ini pasti prank lagi, atau usaha lain buat mancing gue keluar dari tempurung gue. Udah kenyang gue sama drama model begini. Gue bales chat mereka dengan enteng, "Gausah ngaco deh, paling juga lagi sibuk dia." Gue masih berusaha ngebentengin diri, nggak mau percaya sama berita yang kedengerannya terlalu mustahil.
 
@@ -1791,7 +1864,7 @@ Satu minggu berlalu dalam ketidakpastian yang nyiksa. Gue nggak bisa tidur nyeny
 
 Hening sejenak. Terus, suara itu ngucap kalimat yang langsung nusuk jantung gue, tembus sampe ke tulang rusuk paling dalem.
 
-"Dia… dia udah meninggal, Dzan."
+<span id="trigger_teks_meninggal">"Dia… dia udah meninggal, Dzan."</span>
 
 DUNIA GUE SEKETIKA HANCUR. Nggak, nggak mungkin. Gue pasti salah denger. "M-meninggal… meninggal karena apa, Om?" tanya gue, suara gue udah kayak orang mau nangis tapi ketahan di tenggorokan.
 
@@ -1941,13 +2014,13 @@ Buat Dia, itu peluru terakhir yang nembus jantungnya.
 
 
 
-Angka 123 di kalkulator lagi, boleh?
+<br><br><span id="story_point_penutupan"></span>Angka 123 di kalkulator lagi, boleh?<br><br>
 
 
 
 
 
- PENUTUPAN
+ PENUTUPAN<br><br>
 
 
 
@@ -2155,6 +2228,9 @@ Di balik kain ini, ya ini tetep gue. Mungkin bukan gue juga yang udah lumayan la
 </div>
 <!-- Tambahkan ini sebelum tag penutup </body> atau sebelum tag script utama -->
 <audio id="direct-audio-player" style="display:none;"></audio>
+<<div id="sad-effect-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-color: rgba(70, 80, 100, 0.5); backdrop-filter: grayscale(0.7) brightness(0.6); z-index: 25000; pointer-events: none; opacity: 0; transition: opacity 2s ease-in-out; overflow: hidden;">
+    <!-- Kontainer untuk partikel hujan akan ditambahkan oleh JS di sini jika diperlukan -->
+  </div>
   <script src="https://www.youtube.com/iframe_api"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/chroma-js/2.4.2/chroma.min.js"></script>
   
@@ -2189,6 +2265,9 @@ Di balik kain ini, ya ini tetep gue. Mungkin bukan gue juga yang udah lumayan la
         calendarMonthYearText: document.getElementById('calendar-month-year'),
         calendarDaysContainer: document.getElementById('calendar-days'),
         calendarMessageDisplay: document.getElementById('calendar-message-display'),
+        sadEffectOverlay: document.getElementById('sad-effect-overlay'),
+    triggerMeninggalText: document.getElementById('trigger_teks_meninggal'),
+    triggerPenutupanSection: document.getElementById('story_point_penutupan'), // Menggunakan ID yang sudah ada
         
         // Cache untuk Game Memori (Harus diinisialisasi SETELAH DOM siap, seperti yang lain)
         lapisanGameMemori: null, 
@@ -2201,6 +2280,7 @@ Di balik kain ini, ya ini tetep gue. Mungkin bukan gue juga yang udah lumayan la
         tampilanTimerKunciGameMemori: null,
         areaPapanGameMemori: null,
         pesanMenangGameMemori: null,
+
     };
 
      
@@ -2227,6 +2307,9 @@ Di balik kain ini, ya ini tetep gue. Mungkin bukan gue juga yang udah lumayan la
         isScaryEffectActive: false,
         calcInputSequence328: [],
         is328TriggerEnabled: true,
+        calcInputSequence402: [],         // << BARU: Untuk melacak urutan "402"
+            is402TriggerEnabled: true,        // << BARU: Untuk mengontrol pemicu "402"
+            currentLocalVideoSrc: null,       // << BARU/MODIFIKASI: Untuk mengetahui video mana yang sedang aktif
         calcInputSequence8427: [],
         currentCalendarDate: new Date(),
         isCalendarVisible: false,
@@ -2238,6 +2321,9 @@ Di balik kain ini, ya ini tetep gue. Mungkin bukan gue juga yang udah lumayan la
         calcInputSequence916: [],
         calcInputSequence518: [],
         calcInputSequence2010: [],
+        isSadEffectActive: false,
+        rainIntervalId: null,
+        sadEffectObserverInstance: null, // TAMBAHKAN INI
     };
         
         // --- Constants & Configuration ---
@@ -2250,7 +2336,7 @@ Di balik kain ini, ya ini tetep gue. Mungkin bukan gue juga yang udah lumayan la
 
         const SUMBER_GAMBAR_GAME_MEMORI = ["1.jpg", "2.jpeg", "3.jpeg", "4.jpeg", "5.jpeg", "6.jpeg"]; // Pastikan nama berkas ini benar
     const TOTAL_PASANGAN_GAME_MEMORI = SUMBER_GAMBAR_GAME_MEMORI.length;
-    const BATAS_KESALAHAN_GAME_MEMORI = 6;
+    const BATAS_KESALAHAN_GAME_MEMORI = 4;
     const DURASI_KUNCI_GAME_MEMORI = 3 * 60 * 60 * 1000;
     const PENUNDAAN_AUTO_BALIK_SATU_KARTU = 10000; 
     const PENUNDAAN_BALIK_KARTU_TIDAK_COCOK = 1200; 
@@ -2303,6 +2389,8 @@ const SecretMessageManager = {
         // Penyesuaian styling awal jika diperlukan (misal warna font berdasarkan dark mode saat init)
         // sudah dihandle di displayMessage
     },
+
+
 
     getRandomMessage: () => {
         const randomIndex = Math.floor(Math.random() * SECRET_MESSAGES_LIST.length);
@@ -2372,7 +2460,9 @@ const SecretMessageManager = {
             SecretMessageManager.container.classList.remove('visible');
             SecretMessageManager.container.classList.add('hidden');
         }
-    }
+    },
+
+    
 };
 // --- End Secret Messages ---
 
@@ -2454,8 +2544,10 @@ const SecretMessageManager = {
             },
             applyCurrentDarkModeStyles: () => {
                 State.isDarkMode = Cache.body.classList.contains('dark-mode'); 
+                let mainContentWasVisibleWhenToggled = false;
                 if (Cache.storyTextParagraph && State.originalStoryTextHTML) {
                     if (Cache.mainContent && getComputedStyle(Cache.mainContent).display !== 'none') {
+                        mainContentWasVisibleWhenToggled = true; // Catat bahwa konten utama sedang terlihat
                         Cache.storyTextParagraph.innerHTML = State.isDarkMode ? MORSE_MESSAGE_FOR_STORY : State.originalStoryTextHTML;
                          Cache.storyTextParagraph.style.color = State.isDarkMode ? 
                             getComputedStyle(Cache.body).getPropertyValue('--story-text-color-dark') :
@@ -2482,7 +2574,24 @@ const SecretMessageManager = {
                 if (gameMemoriAktif && typeof GameMemori !== 'undefined') {
                 GameMemori.sesuaikanTema();
             }
-            },
+
+            if (mainContentWasVisibleWhenToggled && typeof SadEffectManager !== 'undefined' && SadEffectManager.initEffect) {
+        // Beri sedikit waktu agar DOM update sepenuhnya setelah perubahan innerHTML
+        setTimeout(() => {
+             // Tambahan pengecekan elemen penting di sini sebelum memanggil
+            const triggerMeninggal = document.getElementById('trigger_teks_meninggal');
+            const triggerPenutup = document.getElementById('story_point_penutupan');
+            if (Cache.sadEffectOverlay && triggerMeninggal && triggerPenutup) {
+                SadEffectManager.initEffect();
+            } else {
+                console.warn("applyCurrentDarkModeStyles: Elemen penting untuk SadEffectManager tidak ditemukan setelah update innerHTML, tidak memanggil initEffect.");
+            }
+        }, 100); // Penundaan singkat, bisa disesuaikan jika perlu lebih lama
+    }
+},
+            
+
+            
             setWidgetVisibility: (visible) => {
                 const displayStyle = visible ? 'block' : 'none'; 
                 const activeClass = 'widget-active';
@@ -2589,6 +2698,101 @@ const SecretMessageManager = {
             }
         };
 
+        const StoryProgressManager = {
+    currentHighlightedPointId: null,
+    lastReachedPointKey: 'ceritaAdzanTerakhirDicapai', // Key untuk localStorage
+
+    // Fungsi untuk menyorot dan scroll ke titik tertentu
+    markAndScrollToPoint: (pointId) => {
+        const pointElement = document.getElementById(pointId);
+        if (!pointElement) {
+            console.warn("StoryProgressManager: Titik cerita dengan ID", pointId, "tidak ditemukan.");
+            return;
+        }
+
+        // Hapus sorotan dari titik sebelumnya (jika ada)
+        if (StoryProgressManager.currentHighlightedPointId) {
+            const prevElement = document.getElementById(StoryProgressManager.currentHighlightedPointId);
+            if (prevElement) {
+                prevElement.classList.remove('story-marker-highlight');
+                const prevMarkerText = prevElement.querySelector('.story-marker-text');
+                if (prevMarkerText) prevMarkerText.remove();
+            }
+        }
+
+        // Scroll ke titik baru
+        pointElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+        // Tambahkan sorotan ke titik baru
+        pointElement.classList.add('story-marker-highlight');
+        
+        // Tambahkan teks "Kamu sudah sampai sini" sementara
+        const markerText = document.createElement('span');
+        markerText.className = 'story-marker-text';
+        markerText.textContent = "📍 Terakhir kamu membaca sampai sini.";
+        // (Style warna teks marker sudah dihandle oleh CSS global dark/light mode)
+        pointElement.insertAdjacentElement('afterend', markerText); // Sisipkan setelah span penanda
+        
+        // Buat teks marker terlihat dengan transisi
+        setTimeout(() => markerText.classList.add('visible'), 50); // Delay kecil untuk transisi
+
+        StoryProgressManager.currentHighlightedPointId = pointId;
+        try {
+            localStorage.setItem(StoryProgressManager.lastReachedPointKey, pointId);
+        } catch(e) { console.warn("Gagal menyimpan progres cerita ke localStorage:", e); }
+
+        // Hilangkan teks marker dan highlight setelah beberapa detik
+        setTimeout(() => {
+            markerText.classList.remove('visible');
+            setTimeout(() => { // Tunggu transisi opacity selesai sebelum remove
+                 if (markerText.parentNode) markerText.remove();
+            }, 600); // Sedikit lebih lama dari transisi opacity markerText
+            
+            // Opsional: Jika Anda ingin highlight permanen di span-nya, jangan remove class 'story-marker-highlight'
+            // Jika ingin highlight juga hilang, uncomment baris di bawah:
+            // pointElement.classList.remove('story-marker-highlight');
+        }, 7000); // Teks dan highlight hilang setelah 7 detik
+    },
+
+    // Fungsi untuk memuat titik terakhir yang dicapai dari localStorage saat halaman dimuat
+    loadLastReachedPoint: () => {
+        // Hanya jalankan jika main content sudah terlihat
+        if (!(Cache.mainContent && getComputedStyle(Cache.mainContent).display !== 'none')) {
+            return;
+        }
+
+        try {
+            const lastPointId = localStorage.getItem(StoryProgressManager.lastReachedPointKey);
+            if (lastPointId) {
+                const element = document.getElementById(lastPointId);
+                if (element) {
+                    // Scroll langsung (tanpa smooth) agar pengguna tidak kaget saat reload
+                    element.scrollIntoView({ behavior: 'auto', block: 'center' });
+                    
+                    // Tambahkan highlight sementara saat load
+                    element.classList.add('story-marker-highlight');
+                     const markerText = document.createElement('span');
+                     markerText.className = 'story-marker-text';
+                     markerText.textContent = "📍 Terakhir kamu membaca sampai sini.";
+                     element.insertAdjacentElement('afterend', markerText);
+                     setTimeout(() => markerText.classList.add('visible'), 50);
+
+                    setTimeout(() => {
+                        element.classList.remove('story-marker-highlight');
+                        markerText.classList.remove('visible');
+                        setTimeout(() => {
+                            if(markerText.parentNode) markerText.remove();
+                        }, 600);
+                    }, 3000); // Highlight & teks singkat selama 3 detik saat load
+
+                    StoryProgressManager.currentHighlightedPointId = lastPointId; // Set agar tidak terpicu ulang
+                    console.log("StoryProgressManager: Kembali ke titik terakhir:", lastPointId);
+                }
+            }
+        } catch (e) { console.warn("Gagal memuat progres cerita dari localStorage:", e); }
+    }
+};
+
         // --- Effects & Special Triggers ---
         const Effects = {
             preventScreenshotAndRecording: () => {
@@ -2693,7 +2897,7 @@ const SecretMessageManager = {
                     // Sequence baru untuk audio:
                     State.calcInputSequence123 = []; State.calcInputSequence320 = [];
                     State.calcInputSequence916 = []; State.calcInputSequence518 = [];
-                    State.calcInputSequence2010 = [];
+                    State.calcInputSequence2010 = [];  State.calcInputSequence402 = []; 
                 } else {
                     console.error("Elemen audio dengan ID 'direct-audio-player' tidak ditemukan.");
                 }
@@ -2728,7 +2932,7 @@ const SecretMessageManager = {
                         State.calcInputSequence115 = []; State.calcInputSequence2022 = [];
                         State.calcInputSequence123 = []; State.calcInputSequence320 = [];
                         State.calcInputSequence916 = []; State.calcInputSequence518 = [];
-                        State.calcInputSequence2010 = [];
+                        State.calcInputSequence2010 = [];  State.calcInputSequence402 = [];
                         State.currentCalcInput = '';
                         State.previousCalcInput = '';
                         State.calcOperator = null;
@@ -2748,7 +2952,7 @@ const SecretMessageManager = {
                         State.calcInputSequence115 = []; State.calcInputSequence2022 = [];
                         State.calcInputSequence123 = []; State.calcInputSequence320 = [];
                         State.calcInputSequence916 = []; State.calcInputSequence518 = [];
-                        State.calcInputSequence2010 = [];
+                        State.calcInputSequence2010 = [];   State.calcInputSequence402 = [];
                         State.currentCalcInput = '';
                         State.previousCalcInput = '';
                         State.calcOperator = null;
@@ -2769,7 +2973,7 @@ const SecretMessageManager = {
                             State.calcInputSequence115 = []; State.calcInputSequence2022 = [];
                             State.calcInputSequence123 = []; State.calcInputSequence320 = [];
                             State.calcInputSequence916 = []; State.calcInputSequence518 = [];
-                            State.calcInputSequence2010 = [];
+                            State.calcInputSequence2010 = [];  State.calcInputSequence402 = []; //
                             State.currentCalcInput = '';
                             State.previousCalcInput = '';
                             State.calcOperator = null;
@@ -2777,6 +2981,26 @@ const SecretMessageManager = {
                             return;
                         } else if (State.calcInputSequence328.length > 3) {
                             State.calcInputSequence328.shift();
+                        }
+                    }
+
+                    if (State.is402TriggerEnabled) {
+                        State.calcInputSequence402.push(value);
+                        if (State.calcInputSequence402.join('') === '402') {
+                            LocalVideoManager.showPlayer('veo3.mp4');
+                            // Reset SEMUA sequences
+                            State.calcInputSequence = []; State.calcInputSequence666 = []; State.calcInputSequence777 = [];
+                            State.calcInputSequence328 = []; State.calcInputSequence8427 = [];
+                            State.calcInputSequence402 = []; // Reset juga dirinya sendiri
+                            State.calcInputSequence115 = []; State.calcInputSequence2022 = [];
+                            State.calcInputSequence123 = []; State.calcInputSequence320 = [];
+                            State.calcInputSequence916 = []; State.calcInputSequence518 = [];
+                            State.calcInputSequence2010 = [];
+                            State.currentCalcInput = ''; State.previousCalcInput = ''; State.calcOperator = null;
+                            Calculator.updateDisplay('');
+                            return;
+                        } else if (State.calcInputSequence402.length > 3) {
+                            State.calcInputSequence402.shift();
                         }
                     }
 
@@ -2789,7 +3013,7 @@ const SecretMessageManager = {
                         State.calcInputSequence115 = []; State.calcInputSequence2022 = [];
                         State.calcInputSequence123 = []; State.calcInputSequence320 = [];
                         State.calcInputSequence916 = []; State.calcInputSequence518 = [];
-                        State.calcInputSequence2010 = [];
+                        State.calcInputSequence2010 = [];  State.calcInputSequence402 = []; //
                         State.currentCalcInput = '';
                         State.previousCalcInput = '';
                         State.calcOperator = null;
@@ -2803,12 +3027,11 @@ const SecretMessageManager = {
                    State.calcInputSequence115.push(value);
                         if (State.calcInputSequence115.join('') === '115') {
                             Calculator.playDirectAudioAndReset('mesin.mp3'); 
-                            // Asumsi playDirectAudioAndReset juga membersihkan display dan input state.
-                            // Jika tidak, tambahkan di sini:
-                            // State.currentCalcInput = ''; State.previousCalcInput = ''; State.calcOperator = null;
-                            // Calculator.updateDisplay('');
-                            // State.calcInputSequence115 = []; // playDirectAudioAndReset sebaiknya juga reset ini
-                            return; // Keluar setelah audio dipicu
+                            if (typeof StoryProgressManager !== 'undefined') {
+        StoryProgressManager.markAndScrollToPoint('story_point_kejadian_maret'); // Tandai titik kejadian Maret
+    }
+    return;
+
                         } else if (State.calcInputSequence115.length >= 3) { // Maks panjang 3
                             State.calcInputSequence115.shift();
                         }
@@ -2817,23 +3040,45 @@ const SecretMessageManager = {
                         State.calcInputSequence2022.push(value);
                         if (State.calcInputSequence2022.join('') === '2022') {
                             Calculator.playDirectAudioAndReset('memory.mp3');
-                            // State.currentCalcInput = ''; State.previousCalcInput = ''; State.calcOperator = null;
-                            // Calculator.updateDisplay('');
-                            // State.calcInputSequence2022 = [];
-                            return; // Keluar setelah audio dipicu
+                            if (typeof StoryProgressManager !== 'undefined') {
+        StoryProgressManager.markAndScrollToPoint('story_point_awal');
+    }
+    return;
+
                         } else if (State.calcInputSequence2022.length >= 4) { // Maks panjang 4
                             State.calcInputSequence2022.shift();
                         }
 
-                        // Urutan 123 -> fallen.mp3 (TETAP)
-                        State.calcInputSequence123.push(value);
-                        if (State.calcInputSequence123.join('') === '123') {
-                            Calculator.playDirectAudioAndReset('fallen.mp3');
-                            return;
-                        } else if (State.calcInputSequence123.length >= 3) {
-                            State.calcInputSequence123.shift();
-                        }
+                        State.calcInputSequence123.push(value); // Tetap tambahkan input ke sequence
 
+if (State.calcInputSequence123.join('') === '123') {
+    if (!State.pemicu123PertamaSudahTerjadi) {
+        // Ini adalah pemicu "123" yang PERTAMA (untuk babak SMP)
+        Calculator.playDirectAudioAndReset('fallen.mp3');
+        if (typeof StoryProgressManager !== 'undefined') {
+            StoryProgressManager.markAndScrollToPoint('story_point_smp_intro');
+        }
+        State.pemicu123PertamaSudahTerjadi = true; // Tandai bahwa pemicu pertama sudah terjadi
+        State.calcInputSequence123 = []; // Reset sequence 123 agar bisa digunakan lagi nanti
+        return; // Keluar setelah tindakan selesai
+    } else {
+        // Ini adalah pemicu "123" yang KEDUA (atau selanjutnya, untuk babak Penutupan)
+        // Kita asumsikan ini dipanggil setelah 'story_point_kejadian_maret'
+        // Anda bisa menambahkan pengecekan `StoryProgressManager.currentHighlightedPointId` di sini jika perlu validasi lebih ketat
+        
+        Calculator.playDirectAudioAndReset('fallen.mp3'); // Anda bisa gunakan audio yang sama atau berbeda
+        if (typeof StoryProgressManager !== 'undefined') {
+            StoryProgressManager.markAndScrollToPoint('story_point_penutupan');
+        }
+        // Tidak perlu reset State.pemicu123PertamaSudahTerjadi di sini, karena setelah ini mungkin tidak ada pemicu "123" lagi
+        State.calcInputSequence123 = []; // Reset sequence 123
+        return; // Keluar setelah tindakan selesai
+    }
+} else if (State.calcInputSequence123.length >= 3) {
+    // Jika sequence sudah 3 digit tapi bukan "123", atau jika belum mencapai 3 digit
+    // dan ada input lain yang tidak membuat jadi "123"
+    State.calcInputSequence123.shift();
+}
                         // Urutan 320 -> beanie.mp3 (TETAP)
                         State.calcInputSequence320.push(value);
                         if (State.calcInputSequence320.join('') === '320') {
@@ -2914,7 +3159,7 @@ const SecretMessageManager = {
                         // ===== TAMBAHAN: RESET SEQUENCE AUDIO BARU DI SINI JUGA =====
                         State.calcInputSequence123 = []; State.calcInputSequence320 = [];
                         State.calcInputSequence916 = []; State.calcInputSequence518 = [];
-                        State.calcInputSequence2010 = [];
+                        State.calcInputSequence2010 = [];   State.calcInputSequence402 = [];
                         // ===== AKHIR TAMBAHAN RESET =====
                     }
 
@@ -2954,8 +3199,8 @@ const SecretMessageManager = {
                         State.calcInputSequence328 = []; State.calcInputSequence8427 = [];
                         State.calcInputSequence115 = []; State.calcInputSequence2022 = [];
                         State.calcInputSequence123 = []; State.calcInputSequence320 = [];
-                        State.calcInputSequence916 = []; State.calcInputSequence518 = [];
-                        State.calcInputSequence2010 = [];
+                        State.calcInputSequence916 = []; State.calcInputSequence518 = []; 
+                        State.calcInputSequence2010 = [];   State.calcInputSequence402 = [];    
                     }
                 }
             }
@@ -3219,6 +3464,181 @@ const SecretMessageManager = {
             }
         };
 
+        const SadEffectManager = {
+    rainContainer: null,
+    isObserverActive: false,
+    observerInstance: null,
+
+    initEffect: () => {
+        const currentTriggerMeninggalText = document.getElementById('trigger_teks_meninggal');
+        const currentTriggerPenutupanSection = document.getElementById('story_point_penutupan');
+
+        if (!Cache.sadEffectOverlay || !currentTriggerMeninggalText || !currentTriggerPenutupanSection) {
+            console.warn("SadEffectManager: Elemen penting (overlay, trigger meninggal, atau trigger penutup) tidak ditemukan saat initEffect. Efek tidak akan aktif atau di-reset.");
+            if (SadEffectManager.observerInstance) {
+                SadEffectManager.observerInstance.disconnect();
+                SadEffectManager.observerInstance = null;
+                SadEffectManager.isObserverActive = false;
+                console.log("SadEffectManager: Observer dihentikan karena elemen target hilang.");
+            }
+            if (State.isSadEffectActive) {
+                SadEffectManager.deactivate(true);
+            }
+            return;
+        }
+
+        if (!SadEffectManager.rainContainer && Cache.sadEffectOverlay) { // Tambahkan pengecekan Cache.sadEffectOverlay
+            SadEffectManager.rainContainer = document.createElement('div');
+            Object.assign(SadEffectManager.rainContainer.style, {
+                position: 'absolute', top: '0', left: '0',
+                width: '100%', height: '100%', pointerEvents: 'none'
+            });
+            Cache.sadEffectOverlay.appendChild(SadEffectManager.rainContainer);
+        }
+
+        if (SadEffectManager.observerInstance) {
+            SadEffectManager.observerInstance.disconnect();
+            // console.log("SadEffectManager: Observer lama dihentikan."); // Bisa di-uncomment untuk debug
+        }
+
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1
+        };
+
+        const observerCallback = (entries, observer) => {
+            let triggerMeninggalVisible = false;
+            let triggerPenutupanVisible = false;
+            
+
+            entries.forEach(entry => {
+                if (entry.target.id === 'trigger_teks_meninggal') {
+                    triggerMeninggalVisible = entry.isIntersecting;
+                   
+                } else if (entry.target.id === 'story_point_penutupan') {
+                    triggerPenutupanVisible = entry.isIntersecting;
+                }
+            });
+
+            // Pengecekan elemen masih ada di DOM saat callback diproses
+            const freshTriggerMeninggal = document.getElementById('trigger_teks_meninggal');
+            const freshTriggerPenutupan = document.getElementById('story_point_penutupan');
+
+            if (!freshTriggerMeninggal || !freshTriggerPenutupan) {
+                console.warn("SadEffectManager Callback: Elemen target tidak ditemukan lagi di DOM. Menghentikan observer.");
+                observer.disconnect();
+                SadEffectManager.observerInstance = null;
+                SadEffectManager.isObserverActive = false;
+                if (State.isSadEffectActive) SadEffectManager.deactivate(true);
+                return;
+            }
+
+
+            if (triggerPenutupanVisible) {
+                if (State.isSadEffectActive) {
+                    SadEffectManager.deactivate(); // Akan log (Force: false)
+                }
+                // Setelah penutupan terlihat, hentikan semua observasi terkait efek ini
+                console.log("SadEffectManager: Bagian Penutupan terlihat. Menghentikan semua observasi untuk SadEffect.");
+                observer.unobserve(freshTriggerMeninggal);
+                observer.unobserve(freshTriggerPenutupan);
+                SadEffectManager.isObserverActive = false; // Tandai observer tidak lagi aktif
+                                                      // karena tidak mengamati apa-apa lagi.
+                // SadEffectManager.observerInstance = null; // Bisa juga di-null kan observernya
+            } else if (triggerMeninggalVisible) {
+                if (!State.isSadEffectActive) {
+                    SadEffectManager.activate();
+                }
+           
+            }
+        };
+
+        SadEffectManager.observerInstance = new IntersectionObserver(observerCallback, observerOptions);
+        SadEffectManager.observerInstance.observe(currentTriggerMeninggalText);
+        SadEffectManager.observerInstance.observe(currentTriggerPenutupanSection);
+        SadEffectManager.isObserverActive = true;
+        console.log("SadEffectManager (re)initialized and observing elements.");
+    },
+
+    createRaindrop: () => {
+        if (!SadEffectManager.rainContainer || !State.isSadEffectActive || !Cache.sadEffectOverlay) return;
+
+        const drop = document.createElement('div');
+        drop.classList.add('raindrop');
+        drop.style.left = Math.random() * 100 + 'vw';
+        drop.style.animationDuration = (Math.random() * 1 + 0.5) + 's';
+        drop.style.animationDelay = Math.random() * 0.2 + 's';
+
+        SadEffectManager.rainContainer.appendChild(drop);
+
+        const totalAnimTime = (parseFloat(drop.style.animationDuration) + parseFloat(drop.style.animationDelay)) * 1000;
+        setTimeout(() => {
+            if (drop.parentNode) {
+                drop.remove();
+            }
+        }, totalAnimTime + 200);
+    },
+
+    activate: () => {
+        if (State.isSadEffectActive || !SadEffectManager.isObserverActive) {
+            if (!SadEffectManager.isObserverActive && Cache.triggerMeninggalText && Cache.triggerPenutupanSection) {
+                 // Jika elemen ada tapi observer belum aktif, mungkin perlu initEffect ulang
+                console.warn("SadEffectManager: Mencoba activate saat observer tidak aktif. Mungkin initEffect perlu dipanggil.");
+            } else if (!Cache.triggerMeninggalText || !Cache.triggerPenutupanSection) {
+                 console.warn("SadEffectManager: Elemen pemicu tidak ada, tidak bisa activate.");
+            }
+            return;
+        }
+        console.log("Activating sad effect...");
+        State.isSadEffectActive = true;
+        if (Cache.sadEffectOverlay) {
+            Cache.sadEffectOverlay.style.display = 'block';
+            setTimeout(() => Cache.sadEffectOverlay.classList.add('active'), 20);
+        } else {
+            console.error("SadEffectManager: Cache.sadEffectOverlay tidak ditemukan saat activate!");
+            State.isSadEffectActive = false;
+            return;
+        }
+
+        if (State.rainIntervalId) clearInterval(State.rainIntervalId);
+        State.rainIntervalId = setInterval(SadEffectManager.createRaindrop, 80);
+    },
+
+    deactivate: (forceVisualReset = false) => {
+        if (!State.isSadEffectActive && !forceVisualReset) return;
+        
+        console.log(`Deactivating sad effect... (Force: ${forceVisualReset})`);
+        const wasActive = State.isSadEffectActive; // Catat state sebelum diubah
+        State.isSadEffectActive = false;
+        
+        if (Cache.sadEffectOverlay) {
+            Cache.sadEffectOverlay.classList.remove('active');
+        }
+
+        if (State.rainIntervalId) {
+            clearInterval(State.rainIntervalId);
+            State.rainIntervalId = null;
+        }
+
+        // Hanya lakukan timeout jika efek benar-benar aktif sebelumnya atau dipaksa reset
+        if (wasActive || forceVisualReset) {
+            setTimeout(() => {
+                if (SadEffectManager.rainContainer) {
+                    if (!Cache.sadEffectOverlay || !Cache.sadEffectOverlay.classList.contains('active') || forceVisualReset) {
+                        SadEffectManager.rainContainer.innerHTML = '';
+                    }
+                }
+                if (Cache.sadEffectOverlay) {
+                    if (!Cache.sadEffectOverlay.classList.contains('active') || forceVisualReset) {
+                        Cache.sadEffectOverlay.style.display = 'none';
+                    }
+                }
+            }, 2100); // Durasi transisi CSS opacity
+        }
+    }
+};
+
         // --- YouTube Player ---
         const YouTubePlayer = {
             isAPIReady: false,
@@ -3317,6 +3737,17 @@ const SecretMessageManager = {
 
         const LocalVideoManager = {
             showPlayer: (videoSrc) => {
+                State.currentLocalVideoSrc = videoSrc;
+                let triggerToCheck;
+                if (videoSrc === 'secretvideo.mp4') {
+                    triggerToCheck = State.is328TriggerEnabled;
+                } else if (videoSrc === 'veo3.mp4') {
+                    triggerToCheck = State.is402TriggerEnabled;
+                } else {
+                    triggerToCheck = true; // Untuk video lain yang mungkin ditambahkan tanpa trigger khusus
+                }
+
+                if (!Cache.localVideoOverlay || !Cache.localVideoPlayerElement || !triggerToCheck) return;
                 if (!Cache.localVideoOverlay || !Cache.localVideoPlayerElement || !State.is328TriggerEnabled) return;
 
                 Cache.localVideoOverlay.style.display = 'flex';
@@ -3342,14 +3773,21 @@ const SecretMessageManager = {
 
                 Cache.localVideoOverlay.style.display = 'none';
                 Cache.localVideoPlayerElement.pause();
-                Cache.localVideoPlayerElement.src = ''; // Kosongkan sumber video
+                const closedVideoSrc = Cache.localVideoPlayerElement.src; // Ambil src SEBELUM dikosongkan
+                Cache.localVideoPlayerElement.src = ''; 
 
-                State.is328TriggerEnabled = false; // Nonaktifkan pemicu 328 secara permanen
-                console.log("Pemicu video 328 telah dinonaktifkan permanen.");
+                // Nonaktifkan trigger yang sesuai berdasarkan video yang baru saja ditutup
+                if (State.currentLocalVideoSrc === 'secretvideo.mp4' && State.is328TriggerEnabled) {
+                    State.is328TriggerEnabled = false; 
+                    console.log("Pemicu video '328' (secretvideo.mp4) telah dinonaktifkan permanen.");
+                } else if (State.currentLocalVideoSrc === 'veo3.mp4' && State.is402TriggerEnabled) { // << BARU/MODIFIKASI
+                    State.is402TriggerEnabled = false; 
+                    console.log("Pemicu video '402' (veo3.mp4) telah dinonaktifkan permanen.");
+                }
+                
+                State.currentLocalVideoSrc = null; // << BARU: Reset video yang sedang aktif
 
                 Cache.body.classList.remove('local-video-active');
-
-                // Hapus listener yang sudah terpasang (meskipun {once: true} akan menghapusnya otomatis setelah dieksekusi)
                 document.removeEventListener('click', LocalVideoManager.handleDocumentClickToHide, { capture: true });
                 document.removeEventListener('keydown', LocalVideoManager.handleEscapeKeyToHide);
             },
@@ -3610,8 +4048,11 @@ const SecretMessageManager = {
             }
             
             if (localStorage.getItem('gameMemoriDimenangkan') === 'true') {
-                GameMemori.lanjutkanKeCerita();
-                return;
+                const waktuMenangSaatIni = localStorage.getItem('waktuMenangGameMemori');
+    if (waktuMenangSaatIni && (Date.now() - parseInt(waktuMenangSaatIni)) < SATU_JAM_DALAM_MILIDETIK) {
+        GameMemori.lanjutkanKeCerita(); // Jika masih dalam 1 jam sejak menang, langsung ke cerita
+        return;
+    }
             }
             
             // Sembunyikan Intro Section saat game dimulai
@@ -3764,6 +4205,9 @@ const SecretMessageManager = {
 
             if (pasanganCocokGameMemori === TOTAL_PASANGAN_GAME_MEMORI) {
                 GameMemori.menangkanGame();
+                localStorage.setItem('gameMemoriDimenangkan', 'true');
+localStorage.setItem('waktuMenangGameMemori', Date.now().toString()); // BARIS BARU: Simpan waktu kemenangan
+localStorage.removeItem('jumlahKesalahanGameMemori');
             }
         },
 
@@ -3803,6 +4247,8 @@ const SecretMessageManager = {
                 GameMemori.lanjutkanKeCerita();
             }, 3000); 
         },
+
+
 
         kalahGameDanKunci: () => {
             gameMemoriAktif = false;
@@ -3902,6 +4348,16 @@ const SecretMessageManager = {
                         if (Cache.mainContent) {
                             Cache.mainContent.style.display = 'block'; 
                             Cache.mainContent.classList.add('is-entering');
+                            setTimeout(() => {
+            if (typeof SadEffectManager !== 'undefined' && SadEffectManager.initEffect) {
+                SadEffectManager.initEffect();
+            } else {
+                console.error("SadEffectManager tidak terdefinisi saat mencoba inisialisasi dari GameMemori.");
+            }
+        }, 100); // Penundaan singkat cukup
+                            if (typeof StoryProgressManager !== 'undefined') {
+    StoryProgressManager.loadLastReachedPoint();
+}
                            
                             if (typeof UIManager !== 'undefined' && UIManager.setWidgetVisibility) {
                                  UIManager.setWidgetVisibility(true); 
@@ -3957,6 +4413,8 @@ const SecretMessageManager = {
             }
         }
     };
+
+
 
 
         // --- Secret Triggers Management ---
@@ -4050,6 +4508,8 @@ const SecretMessageManager = {
         }
     };
 
+    const SATU_JAM_DALAM_MILIDETIK = 3600000;
+
     const init = () => {
         // Inisialisasi Cache elemen game di sini, karena elemen game ditambahkan di akhir body
         Cache.lapisanGameMemori = document.getElementById('game-memori-overlay');
@@ -4063,6 +4523,21 @@ const SecretMessageManager = {
         Cache.areaPapanGameMemori = document.getElementById('area-papan-game-memori');
         Cache.pesanMenangGameMemori = document.getElementById('pesan-menang-game-memori');
 
+        const waktuMenangDisimpan = localStorage.getItem('waktuMenangGameMemori');
+    let gameTelahDimenangkanSebelumnya = localStorage.getItem('gameMemoriDimenangkan') === 'true';
+
+    if (gameTelahDimenangkanSebelumnya && waktuMenangDisimpan) {
+        const waktuMenangMs = parseInt(waktuMenangDisimpan, 10);
+        if (Date.now() - waktuMenangMs > SATU_JAM_DALAM_MILIDETIK) {
+            console.log("Game memori: Lebih dari 1 jam telah berlalu sejak kemenangan terakhir. Status kemenangan direset.");
+            localStorage.removeItem('gameMemoriDimenangkan');
+            localStorage.removeItem('waktuMenangGameMemori');
+            gameTelahDimenangkanSebelumnya = false; // Update status untuk digunakan dalam logika di bawah
+        }
+    }
+
+  
+
 
         try {
             if (localStorage.getItem('darkMode') === 'enabled') {
@@ -4074,11 +4549,146 @@ const SecretMessageManager = {
             UIManager.applyCurrentDarkModeStyles();
         }
 
+        const KUNCI_JUMLAH_KUNJUNGAN = 'adzanSitusJumlahKunjungan';
+    const KUNCI_PESAN_KUNJUNGAN_DITAMPILKAN = 'adzanSitusPesanKunjunganDitampilkan'; // Untuk melacak pesan per kunjungan
+    let jumlahKunjungan = 0;
+    let sudahTampilkanPesanKunjunganIni = false;
+
+    try {
+        jumlahKunjungan = parseInt(localStorage.getItem(KUNCI_JUMLAH_KUNJUNGAN) || '0');
+        sudahTampilkanPesanKunjunganIni = localStorage.getItem(KUNCI_PESAN_KUNJUNGAN_DITAMPILKAN) === 'true';
+    } catch (e) {
+        console.warn("Gagal mengakses localStorage untuk jumlah kunjungan:", e);
+    }
+
+    // Hanya tingkatkan jumlah kunjungan jika pesan untuk kunjungan ini BELUM ditampilkan
+    // Ini mencegah jumlahKunjungan bertambah berkali-kali jika pengguna reload halaman di kunjungan yang sama
+    if (!sudahTampilkanPesanKunjunganIni) {
+        jumlahKunjungan++;
+        try {
+            localStorage.setItem(KUNCI_JUMLAH_KUNJUNGAN, jumlahKunjungan.toString());
+            localStorage.setItem(KUNCI_PESAN_KUNJUNGAN_DITAMPILKAN, 'true'); // Tandai pesan untuk kunjungan ini sudah akan ditampilkan
+        } catch (e) {
+            console.warn("Gagal menyimpan jumlah kunjungan ke localStorage:", e);
+        }
+    }
+
+    // Reset flag 'sudahTampilkanPesanKunjunganIni' saat sesi baru dimulai
+    // Ini cara sederhana. Cara lebih robust bisa pakai sessionStorage atau cek timestamp
+    window.addEventListener('beforeunload', () => {
+        try {
+            // Saat pengguna akan meninggalkan halaman/menutup tab,
+            // kita anggap kunjungan berikutnya adalah kunjungan baru.
+            localStorage.removeItem(KUNCI_PESAN_KUNJUNGAN_DITAMPILKAN);
+        } catch (e) {
+            console.warn("Gagal mereset flag pesan kunjungan di localStorage:", e);
+        }
+    });
+
+
+    let pesanKunjungan = null;
+
+    if (jumlahKunjungan === 3) {
+        pesanKunjungan = "Selamat datang kembali.";
+    } else if (jumlahKunjungan === 8) {
+        pesanKunjungan = "Gue rindu ama lo! Selamat datang kembali!";
+    } else if (jumlahKunjungan === 12) {
+        pesanKunjungan = "Ga bosen kah?";
+    } else if (jumlahKunjungan === 24) {
+        pesanKunjungan = "Hmm bener lo pada ga bosen atau cuma jadi detektif doang?";
+    } else if (jumlahKunjungan === 100) {
+        pesanKunjungan = "Dia ga meninggal, jiwanya yang meninggal. Kuburan dan kado itu hanyalah imajinasi untuk memperkuat kesan cerita.";
+    } else if (jumlahKunjungan >= 1000) { // Atau === 1000 jika ingin spesifik hanya di kunjungan ke-1000
+        pesanKunjungan = "Dia itu adalah KHAALISHAH FEBRIANI.";
+    }
+    // Anda bisa tambahkan else if untuk rentang, misalnya jika jumlahKunjungan > 1000 && jumlahKunjungan < 1010
+    // untuk pesan yang berbeda lagi.
+
+
+    if (pesanKunjungan) {
+        // Kita akan menggunakan fungsi yang sama seperti pesan kalkulator
+        // atau membuat fungsi baru khusus untuk ini. Mari gunakan displayTemporaryText jika ada.
+        // Pesan ini akan muncul setelah elemen utama (intro atau main content) ditampilkan.
+        // Jadi kita perlu sedikit penundaan agar tidak muncul terlalu cepat atau sebelum DOM siap.
+        
+        // Pastikan ini dijalankan setelah intro atau main content siap
+        const tampilkanPesanSetelahKontenSiap = () => {
+            // Cek apakah intro atau main content sudah tampil
+            const introTampil = Cache.introSection && getComputedStyle(Cache.introSection).display !== 'none' && getComputedStyle(Cache.introSection).opacity === '1';
+            const mainTampil = Cache.mainContent && getComputedStyle(Cache.mainContent).display !== 'none' && getComputedStyle(Cache.mainContent).opacity === '1';
+
+            if (introTampil || mainTampil) {
+                // Tampilkan pesan hanya jika BELUM ditampilkan di sesi/kunjungan ini
+                // Bendera `sudahTampilkanPesanKunjunganIni` membantu ini,
+                // namun kita reset di `beforeunload`
+                // Logika untuk `KUNCI_PESAN_KUNJUNGAN_DITAMPILKAN` di atas sudah menangani
+                // agar pesan tidak muncul berulang kali pada reload halaman yang sama.
+
+                if (typeof UIManager !== 'undefined' && UIManager.displayTemporaryText) {
+                    setTimeout(() => { // Penundaan sedikit agar tidak terlalu mendadak
+                        UIManager.displayTemporaryText(pesanKunjungan);
+                        // Setelah pesan ditampilkan, tandai agar tidak tampil lagi jika reload
+                        // (sudah dilakukan di atas dengan KUNCI_PESAN_KUNJUNGAN_DITAMPILKAN)
+                    }, 1500); // Tunda 1.5 detik setelah konten siap
+                } else {
+                    // Fallback jika UIManager.displayTemporaryText tidak ada
+                    setTimeout(() => {
+                        alert(pesanKunjungan);
+                    }, 1500);
+                }
+            } else {
+                // Jika konten belum siap, coba lagi nanti
+                setTimeout(tampilkanPesanSetelahKontenSiap, 500);
+            }
+        };
+        
+        // Mulai mencoba menampilkan pesan setelah delay awal
+        setTimeout(tampilkanPesanSetelahKontenSiap, 500); // Penundaan awal
+    }
+
+    console.log("Memulai init() halaman...");
+      
+        console.log("Initial localStorage gameMemoriDimenangkan:", localStorage.getItem('gameMemoriDimenangkan'));
+        console.log("Initial localStorage waktuMenangGameMemori:", waktuMenangDisimpan);
+        console.log("Initial gameTelahDimenangkanSebelumnya (var lokal):", gameTelahDimenangkanSebelumnya);
+
+
+        if (gameTelahDimenangkanSebelumnya && waktuMenangDisimpan) {
+            const waktuMenangMs = parseInt(waktuMenangDisimpan, 10);
+            const selisihWaktuMs = Date.now() - waktuMenangMs;
+            const satuJamMs = SATU_JAM_DALAM_MILIDETIK; // Pastikan SATU_JAM_DALAM_MILIDETIK terdefinisi global (3600000)
+
+            console.log("waktuMenangMs:", waktuMenangMs);
+            console.log("Date.now():", Date.now());
+            console.log("selisihWaktuMs:", selisihWaktuMs);
+            console.log("satuJamMs:", satuJamMs);
+            console.log("Apakah selisihWaktuMs > satuJamMs ?", selisihWaktuMs > satuJamMs);
+
+            if (selisihWaktuMs > satuJamMs) {
+                console.log("Game memori: Lebih dari 1 jam telah berlalu. Status kemenangan direset.");
+                localStorage.removeItem('gameMemoriDimenangkan');
+                localStorage.removeItem('waktuMenangGameMemori');
+                gameTelahDimenangkanSebelumnya = false; // Update status untuk digunakan dalam logika di bawah
+                console.log("localStorage gameMemoriDimenangkan SETELAH reset:", localStorage.getItem('gameMemoriDimenangkan'));
+            } else {
+                console.log("Game memori: Belum 1 jam sejak kemenangan terakhir.");
+            }
+        } else {
+            console.log("Tidak ada status 'gameTelahDimenangkanSebelumnya' atau 'waktuMenangDisimpan' di localStorage.");
+        }
+        // SELESAI KODE DEBUGGING YANG DIMASUKKAN untuk reset
+
+        // ... (LOGIKA PENGHITUNG JUMLAH KUNJUNGAN ANDA BIARKAN SEPERTI SEMULA) ...
+        // const KUNCI_JUMLAH_KUNJUNGAN = 'adzanSitusJumlahKunjungan';
+        // ... (dst, sampai sebelum "LOGIKA AWAL TAMPILAN")
+
+
         // LOGIKA AWAL TAMPILAN (setelah game dimenangkan atau pertama kali)
         const gameDimenangkan = localStorage.getItem('gameMemoriDimenangkan') === 'true';
         const sedangDalamLockout = localStorage.getItem('waktuAkhirKunciGameMemori') && Date.now() < parseInt(localStorage.getItem('waktuAkhirKunciGameMemori'));
 
         if (sedangDalamLockout) {
+            console.log("Masuk blok: sedangDalamLockout"); // LOG
             if (Cache.lapisanGameMemori) Cache.lapisanGameMemori.style.display = 'none'; // Sembunyikan game overlay standar
             if (typeof GameMemori !== 'undefined') GameMemori.tampilkanLayarKunci(parseInt(localStorage.getItem('waktuAkhirKunciGameMemori')));
             if (Cache.darkModeToggleButton) Cache.darkModeToggleButton.style.display = 'flex'; // Tombol mode tetap ada
@@ -4087,6 +4697,7 @@ const SecretMessageManager = {
              if (typeof UIManager !== 'undefined') UIManager.setWidgetVisibility(false); // Sembunyikan widget
 
         } else if (gameDimenangkan) {
+            console.log("Masuk blok: gameDimenangkan (skip ke cerita)"); // LOG
             // Jika game sudah dimenangkan, langsung ke cerita.
             // Ini akan ditangani oleh pemanggilan GameMemori.lanjutkanKeCerita() di dalam GameMemori.init()
             // atau bisa dipanggil langsung di sini jika intro memang sudah seharusnya tidak ada
@@ -4095,12 +4706,20 @@ const SecretMessageManager = {
             if (typeof GameMemori !== 'undefined' && GameMemori.lanjutkanKeCerita) {
                  GameMemori.lanjutkanKeCerita(true); // true untuk memaksa lanjut tanpa pengecekan game aktif
             } else {
+                console.log("Masuk blok: else (tampilkan intro/game)"); // LOG
                  // Fallback manual jika GameMemori belum sepenuhnya siap saat ini
                 if (Cache.darkModeToggleButton) Cache.darkModeToggleButton.style.display = 'flex';
                 if (typeof UIManager !== 'undefined') UIManager.setWidgetVisibility(true);
                 if (Cache.mainContent) { Cache.mainContent.style.display = 'block'; Cache.mainContent.classList.add('is-entering'); }
                 if (typeof SecretMessageManager !== 'undefined') SecretMessageManager.startLoop();
                 if (Cache.nextButtonMainPage && typeof UIManager !== 'undefined') UIManager.startButtonTimer(Cache.nextButtonMainPage, 480);
+                setTimeout(() => {
+                if (typeof SadEffectManager !== 'undefined' && SadEffectManager.initEffect) {
+                    SadEffectManager.initEffect();
+                }
+            }, 100);
+             // >>> AKHIR TAMBAHAN <<<
+        
             }
              if (Cache.lapisanGameMemori) Cache.lapisanGameMemori.style.display = 'none';
 
@@ -4151,6 +4770,8 @@ const SecretMessageManager = {
         
         setupEventListeners();
         console.log("Situs Aether diinisialisasi.");
+        
+    console.warn("PERINGATAN DEBUG: 'State' dan 'UIManager' diekspos sebagai 'window.debugState' dan 'window.debugUIManager'. Hapus setelah selesai!");
     };
 
     init(); 
@@ -4160,7 +4781,7 @@ const SecretMessageManager = {
 <div id="game-memori-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.85); z-index: 50000; display: flex; justify-content: center; align-items: center; font-family: 'Cal Sans', sans-serif; backdrop-filter: blur(5px);">
   <div id="game-memori-container" style="background-color: var(--bg-main-light); color: var(--text-color-light); padding: 20px; border-radius: 10px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.3); max-width: 90%; width: 500px;">
       <h2 id="judul-game-memori" style="color: var(--heading-color-light); margin-bottom: 15px; font-size: 2rem;">Ga semudah itu ferguso</h2>
-      <p id="instruksi-game-memori" style="margin-bottom: 20px; font-size: 1rem; line-height: 1.4;">Banyak anomali yang suka skrinsut abis itu sebar entah kemana-mana, jadi buat keamanan, gue buatin memory puzzle yang cuma bisa dilewatin orang-orang SDM tinggi. Good luck, cuma 24 kesempatan dalam 1 hari.</p>
+      <p id="instruksi-game-memori" style="margin-bottom: 20px; font-size: 1rem; line-height: 1.4;">Banyak anomali yang suka skrinsut abis itu sebar entah kemana-mana, jadi buat keamanan, gue buatin memory puzzle yang cuma bisa dilewatin orang-orang SDM tinggi. Good luck, cuma 16 kesempatan dalam 1 hari.</p>
       
       <div id="layar-kunci-game-memori" style="display: none;">
           <h3 style="color: red; margin-bottom: 10px;">Lo gagal goblok!</h3>
@@ -4169,7 +4790,7 @@ const SecretMessageManager = {
       </div>
 
       <div id="area-papan-game-memori">
-           <p id="kesalahan-game-memori" style="margin-bottom: 15px; font-size: 1.1rem; color: red; font-weight: bold;">Kesalahan: <span id="jumlah-kesalahan">0</span> / 6</p>
+           <p id="kesalahan-game-memori" style="margin-bottom: 15px; font-size: 1.1rem; color: red; font-weight: bold;">Kesalahan: <span id="jumlah-kesalahan">0</span> / 4</p>
           <div id="grid-game-memori" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 20px;">
               <!-- Kartu akan dibuat oleh JavaScript -->
           </div>
